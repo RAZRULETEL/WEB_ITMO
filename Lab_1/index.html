@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1</title>
+
+    <link rel="stylesheet" href="css/Main.css">
+    <link rel="stylesheet" href="css/NiceSelect.css">
+    <link rel="stylesheet" href="css/Header.css">
+    <link rel="stylesheet" href="css/PointsGraphTable.css">
+    <link rel="stylesheet" href="css/FormInputs.css">
+</head>
+<body onload="drawAxes() || loadPointsData()">
+<table class="head">
+    <tr>
+        <td><h1>Лабораторная №1</h1></td>
+    </tr>
+    <tr>
+        <td><h2>P3132</h2></td>
+    </tr>
+    <tr>
+        <td><h2>Мартыненко Вадим Андреевич</h2></td>
+    </tr>
+    <tr>
+        <td><h2>Вариант 1310</h2></td>
+    </tr>
+</table>
+<table class="points-info">
+    <tr>
+        <td>
+            <canvas width="500" height="500"></canvas>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="table-offset-container">
+                <div class="table-container">
+                    <table id="dots-table">
+                        <thead>
+                        <tr>
+                            <th>x</th>
+                            <th>y</th>
+                            <th>r</th>
+                            <th style="padding: 0;">
+                                <label class="custom-select">
+                                    <select id="table-time-format" onchange="updateTimeColumn()">
+                                        <option value="0">timestamp, ms</option>
+                                        <option value="1">Дата и время</option>
+                                        <option value="2">Дата и время (кратко)</option>
+                                        <option value="3">Точное время</option>
+                                    </select>
+                                    <svg>
+                                        <use xlink:href="#select-arrow-down"></use>
+                                    </svg>
+                                </label></th>
+                            <th>Время выполнения, ms</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="points-table-filler">
+                            <td style="height: auto;" colspan="5"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+<form id="dot-controls">
+    <table>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td><input type="button" id="decrease-x" value="-"></td>
+                        <td><input type="text" id="x" name="x" value="0" class="view-only" readonly tabindex="-1"></td>
+                        <td><input type="button" id="increase-x" value="+"></td>
+                    </tr>
+                </table>
+            </td>
+            <td><input type="text" id="y" name="y" autocomplete="off" placeholder="y"></td>
+
+            <!--        label[for=r-$]{$}*5>input[id=r-$,type=checkbox,value=$,name=r]-->
+
+            <td>
+                <table id="radius-selector">
+                    <tr>
+                        <td><label for="r-1">1
+                            <input type="checkbox" id="r-1" value="1" name="radius"></label></td>
+                        <td><label for="r-2">1.5
+                            <input type="checkbox" id="r-2" value="1.5" name="radius"></label></td>
+                        <td><label for="r-3">2
+                            <input type="checkbox" id="r-3" value="2" name="radius"></label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+
+                        <td><label for="r-5">3
+                            <input type="checkbox" id="r-5" value="3" name="radius"></label></td>
+                        <td><label for="r-4">2.5
+                            <input type="checkbox" id="r-4" value="2.5" name="radius"></label></td>
+
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</form>
+<table style="width: 100%;">
+    <tr>
+        <td><input type="button" id="clear" onclick="onClearButtonClick()" value="Очистить"></td>
+        <td><input type="submit" id="send" onclick="onSendButtonClick()"></td>
+    </tr>
+</table>
+<!-- SVG Sprites-->
+<svg class="sprites">
+    <symbol id="select-arrow-down" viewBox="0 0 10 6">
+        <polyline points="1 1 5 5 9 1"></polyline>
+    </symbol>
+</svg>
+<script>
+    const MIN_X = -3, STEP_X = 1, MAX_X = 5;
+    const MIN_Y = -5, MAX_Y = 5;
+
+    let params = new URLSearchParams(location.search);
+    let madness_lvl = params.get('madness') == null ? 0 : params.get('madness');
+
+    const increase_x = document.getElementById("increase-x");
+    const decrease_x = document.getElementById("decrease-x");
+    const value_x = document.getElementById("x");
+    if (madness_lvl == 0) {
+        increase_x.value = "+";
+        decrease_x.value = "-";
+    } else {
+        increase_x.value = "start";
+        decrease_x.value = "stop";
+    }
+    increase_x.addEventListener("click", () => {
+        if (madness_lvl == 0)
+            value_x.value = value_x.value < MAX_X ? +value_x.value + STEP_X : MAX_X;
+        else
+            value_x.setAttribute("randomizing", true);
+    });
+    decrease_x.addEventListener("click", () => {
+        if (madness_lvl == 0)
+            value_x.value = value_x.value > MIN_X ? +value_x.value - STEP_X : MIN_X;
+        else
+            value_x.setAttribute("randomizing", false);
+    });
+
+    const input_y = document.getElementById("y");
+    input_y.addEventListener("input", () => validateY());
+    validateY();
+
+    const checkboxes = document.getElementsByName("radius");
+    checkboxes.forEach(checkbox =>
+        checkbox.addEventListener("change", () => {
+            for (let check of checkboxes) {
+                if (check !== checkbox)
+                    check.checked = false;
+            }
+            validateR();
+        }));
+    validateR();
+
+    const table_body = document.getElementById("dots-table").tBodies[0];
+    table_body.addEventListener("click", () => document.body.style.setProperty("--swap-state", "0"));
+
+
+    const canvas = document.getElementsByTagName("canvas")[0];
+    canvas.addEventListener("click", () => document.body.style.setProperty("--swap-state", "1"));
+    const ctx = canvas.getContext("2d");
+
+    const RGBGradient = {
+        speed: 5,
+        last_speed: 0,
+        degree: 30,
+        colors: [
+            [255, 0, 0],
+            [255, 125, 0],
+            [255, 255, 0],
+            [0, 255, 0],
+            [0, 255, 255],
+            [0, 125, 255],
+            [0, 0, 255],
+            [255, 0, 255]
+        ],
+        next: function () {
+            const speed = this.speed;
+            for (let i = 0; i < this.colors.length; i++) {
+                let r = this.colors[i][0] + this.last_speed - speed;
+                let g = this.colors[i][1] + this.last_speed - speed;
+                let b = this.colors[i][2] + this.last_speed - speed;
+                if (r >= 254 - speed) {
+                    if (b >= 1 + speed)
+                        b -= speed;
+                    else if (g <= 255 - speed)
+                        g += speed;
+                }
+                if (g >= 255 - speed) {
+                    if (r >= 1 + speed)
+                        r -= speed;
+                    else if (b <= 255 - speed)
+                        b += speed;
+                }
+                if (b >= 255 - speed) {
+                    if (g >= 1 + speed)
+                        g -= speed;
+                    else if (r <= 255 - speed)
+                        r += speed;
+                }
+                this.colors[i][0] = Math.floor(r * 10) / 10;
+                this.colors[i][1] = Math.floor(g * 10) / 10;
+                this.colors[i][2] = Math.floor(b * 10) / 10
+            }
+            this.last_speed = speed;
+        },
+        buildGradientString: function (offsetColors = 0, reverseOrder = true) {
+            let colors = this.colors;
+            if (offsetColors !== 0)
+                colors = [...colors.slice(offsetColors), ...colors.slice(0, offsetColors)];
+            let gradient = "-webkit-linear-gradient(" + this.degree + "deg,";
+            if (reverseOrder) {
+                for (let i = colors.length - 1; i > 0; i--) {
+                    if (i !== colors.length - 1)
+                        gradient += ","
+                    gradient += "rgb(" + colors[i].toString() + ")"
+                }
+                gradient += ",rgb(" + colors[colors.length - 1].toString() + "))";
+            } else {
+                for (let i = 0; i < colors.length; i++) {
+                    if (i !== 0)
+                        gradient += ","
+                    gradient += "rgb(" + colors[i].toString() + ")"
+                }
+                gradient += ",rgb(" + colors[0].toString() + "))";
+            }
+            return gradient;
+        }
+    };
+
+    let frame_counter = 0;
+
+    let on_animation = () => {
+        paintChildrenTextRGB(document.getElementsByClassName("head")[0]);
+        if (madness_lvl == 1) {
+            if (frame_counter % 20 === 0)
+                checkboxSnake();
+            if (frame_counter % 2 === 0 && value_x.getAttribute("randomizing") === "true")
+                value_x.value = rand(-3, 5);
+        }
+        window.requestAnimationFrame(on_animation);
+        frame_counter++;
+    };
+
+
+    function drawDot(x, y, r, color = "#000") {
+        const cx = canvas.width / 2, cy = canvas.height / 2;
+        const first_graph_value_offset = (cx - 50) * (2 / 3);
+
+        ctx.fillStyle = color;
+
+        ctx.beginPath();
+        ctx.ellipse(cx + x * first_graph_value_offset / r, cy - y * first_graph_value_offset / r, 4, 4, Math.PI * 2, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function drawAxes(axes_offset = 50) {
+        const width = canvas.width, height = canvas.height;
+
+        ctx.font = "16px monospace";
+
+        drawGraphValues(axes_offset);
+
+        drawArrow(axes_offset, height / 2, width - axes_offset, height / 2);//Ox
+
+        drawArrow(width / 2, height - axes_offset, width / 2, axes_offset);//Oy
+
+        ctx.strokeText("x", width - axes_offset, height / 2 - 10);
+
+        ctx.strokeText("y", width / 2 + 10, axes_offset);
+    }
+
+    function drawArrow(from_x, from_y, to_x, to_y, arrow_size = 10) {
+        const angle = Math.atan2(to_y - from_y, to_x - from_x)
+
+        ctx.beginPath();
+
+        ctx.moveTo(from_x, from_y);
+        ctx.lineTo(to_x, to_y);
+
+        ctx.lineTo(to_x + arrow_size * Math.sin(angle - Math.PI / 4), to_y - arrow_size * Math.cos(angle - Math.PI / 4));
+        ctx.lineTo(to_x, to_y);
+
+
+        ctx.lineTo(to_x - arrow_size * Math.sin(angle + Math.PI / 4), to_y + arrow_size * Math.cos(angle + Math.PI / 4));
+        ctx.lineTo(to_x, to_y);
+
+        ctx.stroke();
+    }
+
+    function drawGraphValues(axes_offset = 100) {
+        const width = canvas.width, height = canvas.height;
+        const first_pos = 2 / 3, //Position of the first value of the graph relative to zero until the end of the axis line
+            second_pos = 1 / 3;
+
+        ctx.fillStyle = "#3399ff";
+        ctx.fillRect(width / 2, height / 2, (width / 2 - axes_offset) * second_pos, (height / 2 - axes_offset) * first_pos);
+
+        ctx.moveTo(width / 2, height / 2);
+        ctx.arc(width / 2, height / 2, (height / 2 - axes_offset) * first_pos, Math.PI, 3 * Math.PI / 2);
+        ctx.fill();
+
+        ctx.moveTo(width / 2, height / 2);
+        ctx.lineTo(width / 2, axes_offset + (height / 2 - axes_offset) * first_pos);
+        ctx.lineTo(width - axes_offset - (width / 2 - axes_offset) * first_pos, height / 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#000";
+
+        ctx.beginPath();
+        //Ox
+        ctx.moveTo(axes_offset + (width / 2 - axes_offset) * second_pos, height / 2 + 10);
+        ctx.lineTo(axes_offset + (width / 2 - axes_offset) * second_pos, height / 2 - 10);
+        ctx.strokeText("-R", axes_offset + (width / 2 - axes_offset) * second_pos, height / 2 - 10);
+
+        ctx.moveTo(axes_offset + (width / 2 - axes_offset) * first_pos, height / 2 + 10);
+        ctx.lineTo(axes_offset + (width / 2 - axes_offset) * first_pos, height / 2 - 10);
+        ctx.strokeText("-R/2", axes_offset + (width / 2 - axes_offset) * first_pos, height / 2 - 10);
+
+        ctx.moveTo(width - axes_offset - (width / 2 - axes_offset) * second_pos, height / 2 + 10);
+        ctx.lineTo(width - axes_offset - (width / 2 - axes_offset) * second_pos, height / 2 - 10);
+        ctx.strokeText("R", width - axes_offset - (width / 2 - axes_offset) * second_pos, height / 2 - 10);
+
+        ctx.moveTo(width - axes_offset - (width / 2 - axes_offset) * first_pos, height / 2 + 10);
+        ctx.lineTo(width - axes_offset - (width / 2 - axes_offset) * first_pos, height / 2 - 10);
+        ctx.strokeText("R/2", width - axes_offset - (width / 2 - axes_offset) * first_pos, height / 2 - 10);
+        //Oy
+        ctx.moveTo(width / 2 + 10, axes_offset + (height / 2 - axes_offset) * second_pos);
+        ctx.lineTo(width / 2 - 10, axes_offset + (height / 2 - axes_offset) * second_pos);
+        ctx.strokeText("R", width / 2 + 10, axes_offset + (height / 2 - axes_offset) * second_pos);
+
+        ctx.moveTo(width / 2 + 10, axes_offset + (height / 2 - axes_offset) * first_pos);
+        ctx.lineTo(width / 2 - 10, axes_offset + (height / 2 - axes_offset) * first_pos);
+        ctx.strokeText("R/2", width / 2 + 10, axes_offset + (height / 2 - axes_offset) * first_pos);
+
+        ctx.moveTo(width / 2 + 10, height - axes_offset - (height / 2 - axes_offset) * first_pos);
+        ctx.lineTo(width / 2 - 10, height - axes_offset - (height / 2 - axes_offset) * first_pos);
+        ctx.strokeText("-R/2", width / 2 + 10, height - axes_offset - (height / 2 - axes_offset) * first_pos);
+
+        ctx.moveTo(width / 2 + 10, height - axes_offset - (height / 2 - axes_offset) * second_pos);
+        ctx.lineTo(width / 2 - 10, height - axes_offset - (height / 2 - axes_offset) * second_pos);
+        ctx.strokeText("-R", width / 2 + 10, height - axes_offset - (height / 2 - axes_offset) * second_pos);
+        ctx.stroke();
+    }
+
+    function paintChildrenTextRGB(parent, angle = 45) {
+        const children = parent.children;
+        RGBGradient.angle = angle;
+        // document.body.style.background = RGBGradient.buildGradientString(0);
+        for (let i = 0; i < children.length; i++) {
+            children[i].style.background = RGBGradient.buildGradientString(i);
+            children[i].style["-webkit-background-clip"] = "text";
+            children[i].style["-webkit-text-fill-color"] = "transparent";
+        }
+        RGBGradient.next();
+    }
+
+    function validateY() {
+        if (input_y.value === "")
+            input_y.setCustomValidity("Значение не введено!");
+        else if (isNaN(input_y.value.replace(",", ".")))
+            input_y.setCustomValidity("Значение должно быть числом!");
+        else {
+            const value = +input_y.value;
+            console.log(value);
+            if (value < MIN_Y)
+                input_y.setCustomValidity("Значение слишком маленькое, должно быть не меньше " + MIN_Y);
+            else if (value > MAX_Y)
+                input_y.setCustomValidity("Значение слишком большое, должно быть не больше " + MAX_Y);
+            else {
+                input_y.setCustomValidity("");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function validateR() {
+        for (let check of checkboxes) {
+            if (check.checked) {
+                checkboxes.forEach(check => check.setCustomValidity(""));
+                return;
+            }
+        }
+        checkboxes[(checkboxes.length - checkboxes.length % 2) / 2].setCustomValidity("Выберите значение!");
+    }
+
+    function onSendButtonClick() {
+        const form = document.getElementById("dot-controls");
+        if (!form.reportValidity())
+            return;
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            console.log(this);
+            if (this.readyState === 4 && this.status === 200) {
+                try {
+                    const point = JSON.parse(this.response);
+                    addPointToTable(point);
+                    drawDot(point.x, point.y, point.r, point.success ? "green" : "red");
+                } catch (e) {
+                    alert(this.response);
+                }
+            } else {
+                alert(this.response);
+            }
+        }
+
+        const formData = new FormData(form);
+
+        let data = [];
+
+        for (const [key, value] of formData)
+            data.push(`${key}=${value.replace(".", ",")}`);
+
+        xhttp.open("GET", "point.php?" + data.join("&"));
+        xhttp.send();
+    }
+
+    function onClearButtonClick(){
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            console.log(this);
+            if (this.readyState === 4 && this.status === 200) {
+                alert("Успешно очищено!");
+            } else {
+                alert(this.response);
+            }
+        }
+
+        xhttp.open("GET", "point.php?clear");
+        xhttp.send();
+    }
+
+    function loadPointsData() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            console.log(this.response);
+            if (this.status === 200) {
+                const data = JSON.parse(this.response);//JSON.parse("[{\"x\":1, \"y\":2, \"r\":4, \"success\":false, \"timestamp\":1691567031.1242, \"exec_time\":0.03048},{\"x\":1, \"y\":2, \"r\":3, \"success\":false, \"timestamp\":1691573306.7721, \"exec_time\":0.030007},{\"x\":2, \"y\":0, \"r\":4, \"success\":false, \"timestamp\":1691573318.4273, \"exec_time\":0.032112},{\"x\":2, \"y\":0, \"r\":4, \"success\":false, \"timestamp\":1691573320.5566, \"exec_time\":0.031426}]");
+                for (const point of data) {
+                    addPointToTable(point);
+                    drawDot(point.x, point.y, point.r, point.success ? "green" : "red");
+                }
+            }
+        }
+
+        xhttp.open("GET", "point.php?list");
+        xhttp.send();
+    }
+
+    function addPointToTable(point) {
+        const tr = document.createElement("tr");
+        tr.style.color = point.success ? "#00c905" : "red";
+
+        const x = document.createElement("td");
+        x.innerText = point.x;
+        const y = document.createElement("td");
+        y.innerText = point.y;
+        const r = document.createElement("td");
+        r.innerText = point.r;
+        const timestamp = document.createElement("td");
+        timestamp.setAttribute("timestamp", point.timestamp);
+        timestamp.innerText = point.timestamp;
+        const execution_time = document.createElement("td");
+        execution_time.innerText = point.exec_time;
+
+
+        tr.append(x, y, r, timestamp, execution_time);
+        document.getElementById("points-table-filler").before(tr);
+    }
+
+    function updateTimeColumn() {
+        const format = +document.getElementById("table-time-format").value;
+        let time_cells = [];
+        for (const tr of table_body.children)
+            for (const td of tr.children)
+                if (td.getAttribute("timestamp"))
+                    time_cells.push(td);
+        switch (format) {
+            case 0:
+                time_cells.forEach(e => e.innerText = e.getAttribute("timestamp"));
+                break;
+            case 1:
+                time_cells.forEach(e => e.innerText = new Date(+e.getAttribute("timestamp")));
+                break;
+            case 2:
+                time_cells.forEach(e => {
+                    const date = new Date(+e.getAttribute("timestamp"));
+                    let date_string = (date.getDay() < 10 ? "0" : "") + date.getDay() + "." + (date.getMonth() < 10 ? "0" : "") + (date.getMonth() + 1) + "." + date.getFullYear();
+                    date_string += " " + date.toLocaleTimeString();
+                    e.innerText = date_string;
+                });
+                break;
+            case 3:
+                time_cells.forEach(e => {
+                    const date = new Date(+e.getAttribute("timestamp"));
+                    e.innerText = date.toLocaleTimeString() + "." + date.getMilliseconds();
+                });
+                break;
+        }
+    }
+
+    function checkboxSnake() {
+        const trs = document.getElementById("radius-selector").tBodies[0].rows;
+        const tds = [...trs[1].cells];
+        for (let i = trs[0].cells.length - 1; i >= 0; i--)
+            tds.push(trs[0].cells[i]);
+        let last_td = tds[tds.length - 1],
+            last_child = last_td.children[0];
+
+        for (let i = 1; i < tds.length; i++) {
+            let buff = tds[i - 1];
+            let buff_child = buff.children[0];
+            if (tds[i - 1].children[0] !== undefined)
+                tds[i - 1].removeChild(tds[i - 1].children[0]);
+            if (last_child !== undefined)
+                tds[i - 1].appendChild(last_child);
+            last_td = buff;
+            last_child = buff_child;
+        }
+        if (last_child !== undefined)
+            tds[tds.length - 1].appendChild(last_child);
+    }
+
+    function rand(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+    }
+
+    window.requestAnimationFrame(on_animation);
+</script>
+</body>
+</html>

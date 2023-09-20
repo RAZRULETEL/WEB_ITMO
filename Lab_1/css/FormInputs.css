@@ -1,0 +1,109 @@
+#dot-controls > table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#dot-controls td > * {
+    margin: 0 20%;
+}
+
+input[type="submit"], input[type="button"] {
+    box-shadow: 2px 4px 6px -5px;
+    font-size: 14pt;
+    padding: 10px 20px;
+    border: 3px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+    margin: 20px auto;
+    display: block;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+    box-shadow: 6px 8px 20px -5px;;
+    scale: 1.05;
+    transition: 0.2s;
+}
+
+input[type="submit"]:active, input[type="button"]:active {
+    scale: 1.1;
+    box-shadow: 6px 10px 20px 4px;
+    transition: 0s;
+}
+
+input[type="text"] {
+    box-shadow: 0 1px 5px -2px;
+    border: solid 0.8px transparent;
+    border-radius: 5px;
+    padding: 7.8px 12.8px;
+    height: fit-content;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #07f;
+    box-shadow: 0 1px 3px 0 rgb(0 118 255 / 70%);
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+label:has(input[type="checkbox"]) {
+    cursor: pointer;
+    user-select: none;
+}
+
+input[type="text"].view-only {
+    pointer-events: none;
+    text-align: center;
+    width: 20px;
+    box-shadow: none;
+    border: none;
+}
+
+#radius-selector {
+    gap: 20%;
+}
+
+#radius-selector td > * {
+    margin: 5px;
+    text-align: right;
+    width: 100%;
+    display: block;
+    padding: 3px;
+}
+
+#increase-x, #decrease-x {
+    border: 2px solid;
+    border-radius: 15px;
+    padding: 5px;
+    cursor: pointer;
+    transition: 200ms;
+    background: white;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+#increase-x {
+    border-color: green;
+    box-shadow: 1px 1px lawngreen;
+}
+
+#decrease-x {
+    border-color: darkred;
+    box-shadow: 1px 1px red;
+}
+
+
+#increase-x:hover {
+    box-shadow: 3px 3px 5px lawngreen;
+    transition: 200ms;
+    transform: scale(1.05);
+}
+
+#decrease-x:hover {
+    box-shadow: 3px 3px 5px red;
+    transition: 200ms;
+    transform: scale(1.05);
+}

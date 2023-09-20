@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dot check</title>
+    <link rel="stylesheet" href="css/PointsGraphTable.css">
+    <link rel="stylesheet" href="css/Main.css">
+    <link rel="stylesheet" href="css/Header.css">
+    <link rel="stylesheet" href="css/CheckPoint.css">
+</head>
+<body onload="init()">
+<div class="checker-page">
+    <%header%>
+    <div>
+        <canvas width="500" height="500"></canvas>
+        <div class="check-result">
+            <%info%>
+        </div>
+    </div>
+</div>
+<script src="js/GraphTools.js"></script>
+<script>
+    const point = <%point%>;
+
+    if (point == null) {
+        alert("Введены неккоректные данные точки!")
+        document.location.replace(document.location.origin + document.location.pathname);
+    }
+
+    const canvas = document.getElementsByTagName("canvas")[0];
+    const ctx = canvas.getContext("2d");
+
+    const point_x = getPointCanvasX(ctx, point, 15);
+    const point_y = getPointCanvasY(ctx, point, 15);
+
+    const RGBGradient = {
+        speed: 2,
+        last_speed: 0,
+        degree: 30,
+        colors: [
+            [255, 0, 0],
+            // [255, 125, 0],
+            // [255, 255, 0],
+            // [125, 255, 0],
+            [0, 255, 0],
+            // [0, 255, 125],
+            // [0, 255, 255],
+            // [0, 125, 255],
+            [0, 0, 255],
+            // [125, 0, 255],
+            // [255, 0, 255],
+            // [255, 0, 125],
+        ],
+        next: function () {
+            const speed = this.speed;
+            for (let i = 0; i < this.colors.length; i++) {
+                let r = this.colors[i][0] + this.last_speed - speed;
+                let g = this.colors[i][1] + this.last_speed - speed;
+                let b = this.colors[i][2] + this.last_speed - speed;
+                if (r >= 254 - speed) {
+                    if (b >= 1 + speed)
+                        b -= speed;
+                    else if (g <= 255 - speed)
+                        g += speed;
+                }
+                if (g >= 255 - speed) {
+                    if (r >= 1 + speed)
+                        r -= speed;
+                    else if (b <= 255 - speed)
+                        b += speed;
+                }
+                if (b >= 255 - speed) {
+                    if (g >= 1 + speed)
+                        g -= speed;
+                    else if (r <= 255 - speed)
+                        r += speed;
+                }
+                this.colors[i][0] = Math.floor(r * 10) / 10;
+                this.colors[i][1] = Math.floor(g * 10) / 10;
+                this.colors[i][2] = Math.floor(b * 10) / 10
+            }
+            this.last_speed = speed;
+        },
+    };
+
+    let arrows_offset = 0;
+
+    let on_animation = () => {
+        clearCanvas(ctx);
+        drawAxes(ctx, 15);
+        drawPoint(ctx, point, point.success ? "lime" : "red", 15);
+        [0,0,0].map((e, i, arr) => ((2 / arr.length) * i) * Math.PI + arrows_offset++ / 100).forEach((e, i) => {
+            const color = "rgb(" + RGBGradient.colors[i][0] + "," + RGBGradient.colors[i][1] + "," + RGBGradient.colors[i][2] + ")";
+            drawArrow(ctx, point_x + Math.sin(e) * 150, point_y + Math.cos(e) * 150, point_x +  + Math.sin(e) * 10, point_y +  + Math.cos(e) * 10, 10, color);
+        });
+        RGBGradient.next();
+
+
+
+
+
+        window.requestAnimationFrame(on_animation);
+    }
+
+    function init(){
+        drawAxes(ctx);
+        drawPoint(ctx, point, point.success ? "lime" : "red");
+        window.requestAnimationFrame(on_animation);
+    }
+
+    function redirectToForm(){
+        document.getElementsByClassName("checker-page")[0].classList.add("hide");
+        setTimeout(function() {
+            document.location.replace(document.location.origin + document.location.pathname);
+        }, 1000);
+    }
+</script>
+</body>
+</html>

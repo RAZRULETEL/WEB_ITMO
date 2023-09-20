@@ -1,0 +1,124 @@
+.table-offset-container {
+    position: relative;
+    width: 0;
+    height: 0;
+    margin: 0 max((100% - 500px) / 2, 0px);
+    transition: 0.5s;
+}
+
+.table-container {
+    width: min(500px, 100vw - 10px);
+    height: min(500px, 100vw - 10px);
+    position: absolute;
+    top: max(-500px, -100vw + 10px);
+    transform: rotateY(calc(180deg * (1 - var(--swap-state))));
+    opacity: var(--swap-state);
+    transition: 0.5s;
+    z-index: var(--swap-state);
+    overflow-y: auto;
+    background: transparent;
+}
+
+.table-container::-webkit-scrollbar {
+    display: none;
+}
+
+#dots-table {
+    width: clamp(400px, 100vw - 10px, 500px);
+    height: min(500px, 100vw - 10px);
+    border-collapse: collapse;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background: lightgrey;
+}
+
+thead {
+    border: 1px solid black;
+}
+
+#dots-table td, #dots-table th {
+    border: 1px solid transparent;
+    min-width: 30px;
+    padding-left: 5px;
+}
+
+#dots-table tr {
+    background: white;
+    border-bottom: 1px solid #bdbdbd;
+    text-align: center;
+}
+
+#dots-table tr:nth-child(2n) {
+    background: #fffeda;
+}
+
+#points-table-filler {
+    background: #fff6 !important;
+}
+
+#dots-table > tbody > tr > td:not(:last-child) {
+    border-right: 1px solid #bdbdbd;
+}
+
+#dots-table > tbody > tr > td:first-child {
+    height: 20px;
+}
+
+th > .custom-select select {
+    font-size: initial;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0 0 0 5px;
+    border-radius: 0;
+    background: transparent;
+    font-weight: bold;
+}
+
+th > .custom-select select:focus {
+    box-shadow: none;
+}
+
+th > .custom-select svg {
+    stroke: #000000;
+}
+
+#tooltip{
+    position: absolute;
+    z-index: 999999;
+    background: white;
+    border-radius: 10px;
+    padding: 2px 5px;
+    pointer-events: none;
+}
+
+.table-controls{
+    position: absolute;
+    top: 0;
+    right: max((100% - 500px) / 2 - 50px, 0px);
+    display: flex;
+    flex-direction: column;
+    transition: 0.5s;
+}
+
+.table-controls > button {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    transition: 0.5s;
+    transform-origin: top center;
+}
+
+.table-controls > button > img {
+    width: 40px;
+    pointer-events: none;
+    transition: 1s;
+}
+
+.table-controls > button.parallel {
+    transform: rotateX(180deg);
+    transition: 0.5s;
+}

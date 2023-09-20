@@ -1,0 +1,22 @@
+.head {
+    width: 100%;
+    text-align: center;
+    font-family: fantasy;
+    color: blue;
+}
+
+.head > tbody > tr:first-child td * {
+    font-size: 24pt;
+}
+
+.head > tbody > tr:not(:first-child) td * {
+    font-size: 20pt;
+}
+
+.head h1, .head h2 {
+    margin: 5px 0;
+}
+
+.head > tbody > tr {
+    background: none;
+}
