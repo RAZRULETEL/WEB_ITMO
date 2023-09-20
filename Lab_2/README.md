@@ -29,7 +29,7 @@
 Разработанное веб-приложение необходимо развернуть на сервере [WildFly](https://wildfly.org/). Сервер должен быть запущен в standalone-конфигурации, порты должны быть настроены в соответствии с выданным portbase, доступ к http listener'у должен быть открыт для всех IP.
 
 <p align="center">
-  <img src="https://github.com/RAZRULETEL/WEB_ITMO/assets/48093833/01aff702-5279-4b4f-9f65-b14f547fa66d" />
+  <img src="https://github.com/RAZRULETEL/WEB_ITMO/assets/48093833/343d784c-7330-41d0-9925-0515273f3b14" />
 </p>
 
 ### Дополнительное задание
