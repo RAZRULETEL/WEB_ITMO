@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html
+    xmlns:faces="jakarta.faces"
+    xmlns:ui="jakarta.faces.facelets"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
+    xmlns:cc="jakarta.faces.composite"
+    xmlns:my="jakarta.faces.component"
+    xmlns:c="jakarta.tags.core"
+    xmlns:fn="jakarta.tags.functions"
+    xmlns:p="http://primefaces.org/ui"
+>
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <title>Welcome to Lab 3!</title>
+</h:head>
+<h:outputStylesheet library="css" name="Header.css"/>
+<h:outputStylesheet library="css" name="Main.css"/>
+<h:outputStylesheet library="css" name="WelcomePage.css"/>
+<h:body styleClass="welcome-page">
+    <div class="head">
+        <p>Лабораторная №3</p>
+        <p>Мартыненко Вадим Андреевич</p>
+        <p>P3232</p>
+        <p>Вариант <span id="variant">8272722</span></p>
+    </div>
+    <div id="watches"></div>
+    <h:form action="#{mapper.getMapping()}" id="mapper_form" style="display: flex;">
+        <h:commandButton action='#{mapper.remap("dots")}' value="Перейти на основную страницу"/>
+    </h:form>
+    <h:outputScript library="js" name="HeaderGradient.js" target="head"/>
+    <h:outputScript library="js" name="StartPage.js" target="head"/>
+</h:body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html
+    xmlns:faces="jakarta.faces"
+    xmlns:ui="jakarta.faces.facelets"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
+    xmlns:cc="jakarta.faces.composite"
+    xmlns:my="jakarta.faces.component"
+    xmlns:c="jakarta.tags.core"
+    xmlns:fn="jakarta.tags.functions"
+    xmlns:p="http://primefaces.org/ui"
+>
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <title>Document</title>
+</h:head>
+<h:outputStylesheet library="css" name="PointsGraphTable.css"/>
+<h:outputStylesheet library="css" name="Main.css"/>
+<h:outputStylesheet library="css" name="NiceSelect.css"/>
+<h:outputStylesheet library="css" name="FormInputs.css"/>
+<h:outputStylesheet library="css" name="Header.css"/>
+<h:body styleClass="inputs-page" style="--swap-state: 0;">
+        <div class="head">
+            <p>Лабораторная №3</p>
+        </div>
+    <div class="points-info">
+        <h:form id="hidden-canvas-form">
+            <h:commandLink onclick="return onCanvasClick(event);" action="#{results.addFromCanvas()}">
+                <canvas width="500" height="500"/>
+                <f:ajax execute="@form" render="table-text"/>
+            </h:commandLink>
+            <h:inputHidden id="x" value="#{results.canvasPoint.x}"/>
+            <h:inputHidden id="y" value="#{results.canvasPoint.y}"/>
+            <h:inputHidden id="r" value="#{results.canvasPoint.r}"/>
+        </h:form>
+        <div class="table-offset-container">
+            <h:panelGroup layout="block" styleClass="table-container" id="table-text">
+                <h:outputText value="#{results.renderTable()}" escape="false"/>
+            </h:panelGroup>
+        </div>
+        <div class="table-controls-container">
+            <div class="table-controls">
+                <button id="canvas-turn-button"><h:graphicImage value="/img/refresh.png"/></button>
+                <button id="parallel-table-button"><h:graphicImage value="/img/parallel.png"/></button>
+            </div>
+        </div>
+    </div>
+    <h:form id="dot-controls">
+        <div>
+            <div class="cmd-x">
+                <h:commandLink styleClass="decrease-x" value="-"
+                               action="#{results.point.setXIfInRange(results.point.x - 1, -5, 3)}">
+                    <f:ajax  execute = "x" render = "x"/>
+                </h:commandLink>
+                <h:outputText id="x" value="#{results.point.x}"/>
+                <h:commandLink styleClass="increase-x" value="+"
+                               action="#{results.point.setXIfInRange(results.point.x + 1, -5, 3)}">
+                    <f:ajax  execute = "x" render = "x"/>
+                </h:commandLink>
+            </div>
+            <p:inputText id="y" requiredMessage="Y is required" required="true" value="#{results.point.y}" placeholder="y"/>
+            <p:inputText id="r" requiredMessage="R is required" required="true" value="#{results.point.r}" placeholder="r"/>
+        </div>
+        <div>
+            <h:commandButton immediate="true" action='#{mapper.remap("index")}' value="Вернуться на стартовую">
+                <f:ajax execute="@this" render="@all" />
+            </h:commandButton>
+            <h:commandButton onclick="replaceColons();" action="#{results.add()}" value="Send"/>
+            <h:commandButton immediate="true" action="#{results.clear()}" value="Clear">
+                <f:ajax render = "table-text"/>
+            </h:commandButton>
+        </div>
+    </h:form>
+
+
+    <div id="tooltip" style="top: -1000px;left: -1000px">
+        <span class="tooltip-text">Подсказка</span>
+    </div>
+    <!-- SVG Sprites-->
+    <svg class="sprites">
+        <symbol id="select-arrow-down" viewBox="0 0 10 6">
+            <polyline points="1 1 5 5 9 1"></polyline>
+        </symbol>
+    </svg>
+
+    <h:outputScript library="js" name="HeaderGradient.js" target="head"/>
+    <h:outputScript library="js" name="GraphTools.js" target="head"/>
+    <h:outputScript library="js" name="Main.js" target="head"/>
+</h:body>
+</html>

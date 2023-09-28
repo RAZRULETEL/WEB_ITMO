@@ -1,0 +1,21 @@
+#mapper_form > input[type="submit"]{
+    font-size: 20px;
+    background: #15ff0030;
+    border: 1px solid #1dff0075;
+    color: #00ff00c2;
+    cursor: pointer;
+    padding: 3px 6px;
+    margin: auto;
+    display: block;
+    border-radius: 0;
+}
+
+#watches{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20pt;
+    color: #fff;
+    width: calc(100vw / 2 - 120px);
+    text-align: right;
+}

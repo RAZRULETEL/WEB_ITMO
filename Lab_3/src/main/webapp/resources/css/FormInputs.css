@@ -1,0 +1,175 @@
+#dot-controls{
+    margin: 0 10%;
+    backdrop-filter: blur(7px);
+    padding: 1px 20px;
+    /*animation: 10s rgb-back infinite;*/
+    border-radius: 10px;
+    background: #fff6;
+}
+
+#dot-controls > div {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+input[type="submit"], input[type="button"] {
+    box-shadow: 2px 4px 6px -5px;
+    font-size: 14pt;
+    padding: 10px 20px;
+    border: 3px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+    margin: 20px auto;
+    display: block;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+    box-shadow: 6px 8px 20px -5px;;
+    scale: 1.05;
+    transition: 0.2s;
+}
+
+input[type="submit"]:active, input[type="button"]:active {
+    scale: 1.1;
+    box-shadow: 6px 10px 20px 4px;
+    transition: 0s;
+}
+
+input[type="text"] {
+    box-shadow: 0 1px 5px -2px;
+    border: solid 0.8px transparent;
+    border-radius: 5px;
+    padding: 7.8px 12.8px;
+    height: fit-content;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #07f;
+    box-shadow: 0 1px 3px 0 rgb(0 118 255 / 70%);
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+label:has(input[type="checkbox"]) {
+    cursor: pointer;
+    user-select: none;
+}
+
+input[type="text"].view-only {
+    pointer-events: none;
+    text-align: center;
+    width: 20px;
+    box-shadow: none;
+    border: none;
+}
+
+#radius-selector {
+    gap: 20%;
+    color: white;
+}
+
+#radius-selector td > * {
+    margin: 5px;
+    text-align: right;
+    width: 100%;
+    display: block;
+    padding: 3px;
+}
+
+.increase-x, .decrease-x {
+    border: 2px solid;
+    border-radius: 15px;
+    padding: 5px;
+    cursor: pointer;
+    transition: 200ms;
+    background: white;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+.increase-x {
+    border-color: green;
+    box-shadow: 1px 1px lawngreen;
+}
+
+.decrease-x {
+    border-color: darkred;
+    box-shadow: 1px 1px red;
+}
+
+
+.increase-x:hover {
+    box-shadow: 3px 3px 5px lawngreen;
+    transition: 200ms;
+    transform: scale(1.05);
+}
+
+.decrease-x:hover {
+    box-shadow: 3px 3px 5px red;
+    transition: 200ms;
+    transform: scale(1.05);
+}
+
+canvas {
+    background: #fff6;;
+    backdrop-filter: blur(7px);
+    border-radius: 10px;
+    height: auto;
+    width: min(500px, 100vw - 10px);
+    position: relative;
+    display: block;
+    transform: rotateY(calc(180deg * var(--swap-state)));
+    transition: 0.5s;
+    z-index: calc(1 - var(--swap-state));
+    opacity: calc(1 - var(--swap-state));
+}
+
+a:has(canvas) {
+    margin: 20px auto 0 calc(50% - 250px);
+    display: block;
+    width: fit-content;
+    transition: 0.5s;
+}
+
+.points-info {
+    position: relative;
+    margin: 20px auto;
+    border-spacing: 0;
+}
+
+.points-info > tbody > tr > td {
+    padding: 0;
+}
+
+.cmd-x{
+    display: flex;
+    width: 120px;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.cmd-x > a {
+    color: black;
+    text-decoration: none;
+    text-align: center;
+}
+
+
+@keyframes rgb-back {
+    0.00% { background-color: rgba(255, 0, 0, 0.3);    }
+    14.29% { background-color: rgba(255, 165, 0, 0.3); }
+    28.57% { background-color: rgba(255, 255, 0, 0.3); }
+    42.86% { background-color: rgba(0, 128, 0, 0.3);  }
+    57.14% { background-color: rgba(0, 0, 255, 0.3);   }
+    71.43% { background-color: rgba(75, 0, 130, 0.3); }
+    85.71% { background-color: rgba(238, 130, 238, 0.3); }
+    100.00% { background-color: rgba(255, 0, 0, 0.3); }
+}
