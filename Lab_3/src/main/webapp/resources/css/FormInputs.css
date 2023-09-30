@@ -14,7 +14,7 @@
     align-items: center;
 }
 
-input[type="submit"], input[type="button"] {
+.inputs-page input[type="submit"], .inputs-page input[type="button"] {
     box-shadow: 2px 4px 6px -5px;
     font-size: 14pt;
     padding: 10px 20px;
@@ -26,13 +26,13 @@ input[type="submit"], input[type="button"] {
     display: block;
 }
 
-input[type="submit"]:hover, input[type="button"]:hover {
+.inputs-page input[type="submit"]:hover, .inputs-page input[type="button"]:hover {
     box-shadow: 6px 8px 20px -5px;;
     scale: 1.05;
     transition: 0.2s;
 }
 
-input[type="submit"]:active, input[type="button"]:active {
+.inputs-page input[type="submit"]:active, .inputs-page input[type="button"]:active {
     scale: 1.1;
     box-shadow: 6px 10px 20px 4px;
     transition: 0s;

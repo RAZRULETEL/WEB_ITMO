@@ -10,6 +10,11 @@ const onLoad = () => {
     }, 10_000);
     watches.innerText = getFormattedDateTime();
 
+    const form = document.getElementById("mapper_form");
+    const avoidingButton = new CursorAvoidButton(document.getElementById("mapper_form:remap"), true, 250);
+    avoidingButton.HTMLElement.style.transition = "0.1s";
+    avoidingButton.borderColor = "#12da00";
+
     let madness = 1;
 
     Gradient.paintChildrenTextRGB(document.getElementsByClassName("head")[0]);
@@ -21,13 +26,12 @@ const onLoad = () => {
             madness = !madness;
             if(!madness)
                 variantElement.innerText = variant;
-
+            avoidingButton.setAvoiding = !avoidingButton.isAvoiding;
         }
     });
 
     const onResize = () => {
-        console.log("Resize");
-        document.body.children[document.body.childElementCount - 1].style.height = calculateFormSize();
+        form.style.height = calculateFormSize(form);
     };
 
     window.addEventListener("resize", onResize);
@@ -36,8 +40,6 @@ const onLoad = () => {
     });
 
     [document.body, ...document.body.children].forEach(e => resizeObserver.observe(e));
-
-    resizeObserver.observe(document.querySelector("div"));
     onResize();
 
     let on_animation = () => {
@@ -78,8 +80,8 @@ function getFormattedDateTime() {
     return `${day}.${month}.${year} ${time}`;
 }
 
-function calculateFormSize(){
+function calculateFormSize(form){
     return (document.body.clientHeight
         - [...document.body.children].reduce((sum, e) => sum + e.clientHeight, 0)
-        + document.body.children[document.body.childElementCount - 1].clientHeight) + "px";
+        + form.clientHeight) + "px";
 }
