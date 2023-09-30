@@ -14,9 +14,10 @@ window.onload = () => {
                 redrawPoints();
                 if(document.getElementById("parallel-table-button").classList.contains("parallel"))
                     updateParallels();
-                const trs = document.getElementById("dots-table").tBodies[0].rows;
+                // const trs = document.getElementById("dots-table").tBodies[0].rows;
+                const trs = document.getElementById("dots-table").getElementsByTagName("table")[0].tBodies[0].rows;
                 if(trs.length > 1)
-                    document.getElementById("tooltip").innerText = document.getElementById("tooltip").innerText.replace("🕓", trs.item(trs.length - 2).style.color === "red" ? "❌" : "✅" )
+                    document.getElementById("tooltip").innerText = document.getElementById("tooltip").innerText.replace("🕓", trs.item(trs.length - 2).classList.contains("success-text") ? "✅" : "❌" )
             }
         }
     });
@@ -125,15 +126,16 @@ window.onload = () => {
     }
 
     function redrawPoints() {
-        const table_body = document.getElementById("dots-table").tBodies[0];
-        for (let i = 0; i < table_body.rows.length - 1; i++) {
+        // const table_body = document.getElementById("dots-table").tBodies[0];
+        const table_body = document.getElementById("dots-table").getElementsByTagName("table")[0].tBodies[0];
+        for (let i = 0; i < table_body.rows.length; i++) {
             if (table_body.rows[i].childElementCount >= 3) {
                 const point = {
                     x: table_body.rows[i].children[0].innerText,
                     y: table_body.rows[i].children[1].innerText,
                     r: table_body.rows[i].children[2].innerText
                 };
-                drawPoint(ctx, point, table_body.rows[i].style.color, AXES_OFFSET);
+                drawPoint(ctx, point, table_body.rows[i].classList.contains("success-text") ? "#00c905" : "red", AXES_OFFSET);
             }
         }
     }

@@ -38,7 +38,31 @@
         </h:form>
         <div class="table-offset-container">
             <h:panelGroup layout="block" styleClass="table-container" id="table-text">
-                <h:outputText value="#{results.renderTable()}" escape="false"/>
+                <p:dataTable id="dots-table" var="point" value="#{results.getAll()}"
+                    rowStyleClass="#{point.success ? 'success-text' : 'fail-text'}"
+                    resizableColumns="true">
+                    <p:column headerText="x" width="1">
+                        <h:outputText value="#{point.x}" />
+                    </p:column>
+
+                    <p:column headerText="y" width="1">
+                        <h:outputText value="#{point.y}" />
+                    </p:column>
+
+                    <p:column headerText="r" width="1">
+                        <h:outputText value="#{point.r}" />
+                    </p:column>
+
+                    <p:column headerText="Дата и время" width="50">
+                        <h:outputText value='#{point.getFormattedTimestamp("dd-MM-yyyy HH:mm:ss")}' />
+                    </p:column>
+
+                    <p:column width="40">
+                        <f:facet name="header"><h:outputText value="Время&lt;br/&gt;выполнения, ms" escape="false"/></f:facet>
+                        <h:outputText value="#{point.executionTime}" />
+                    </p:column>
+                </p:dataTable>
+<!--                <h:outputText value="#{results.renderTable()}" escape="false"/>-->
             </h:panelGroup>
         </div>
         <div class="table-controls-container">

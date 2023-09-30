@@ -122,3 +122,11 @@ th > .custom-select svg {
     transform: rotateX(180deg);
     transition: 0.5s;
 }
+
+.success-text{
+    color: #00c905 !important;
+}
+
+.fail-text{
+    color: red !important;
+}
