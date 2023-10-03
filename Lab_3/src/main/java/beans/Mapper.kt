@@ -6,15 +6,15 @@ import java.io.Serializable
 
 @Named("mapper")
 @SessionScoped
-class Mapper: Serializable {
+class Mapper : Serializable {
     var currentPage = "index"
 
-    fun remap(target: String): String{
+    fun remap(target: String): String {
         currentPage = target
         return target
     }
 
-    fun getMapping(): String{
+    fun getMapping(): String {
         return currentPage
     }
 }

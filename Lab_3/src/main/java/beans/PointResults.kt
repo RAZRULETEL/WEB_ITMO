@@ -9,29 +9,29 @@ import java.io.Serializable
 
 @Named("results")
 @SessionScoped
-class PointResults: Serializable {
-    private val results: MutableList<PointCheckResult> = DBHandler.instance.getAllResults()
+class PointResults : Serializable {
+    private var results: MutableList<PointCheckResult> = if(DBHandler.instance == null) ArrayList() else DBHandler.instance!!.getAllResults()
     val point: Point = Point()
     val canvasPoint: Point = Point()
 
     fun add() {
         val nano = System.nanoTime();
         results.add(point.getResult(nano))
-        DBHandler.instance.addResult(point.getResult(nano))
+        DBHandler.instance?.addResult(point.getResult(nano))
     }
 
-    fun addFromCanvas(){
+    fun addFromCanvas() {
         val nano = System.nanoTime();
         results.add(canvasPoint.getResult(nano))
-        DBHandler.instance.addResult(canvasPoint.getResult(nano))
+        DBHandler.instance?.addResult(canvasPoint.getResult(nano))
     }
 
     fun clear() {
         results.clear()
-        DBHandler.instance.clearResults()
+        DBHandler.instance?.clearResults()
     }
 
-    fun getAll(): List<PointCheckResult>{
+    fun getAll(): List<PointCheckResult> {
         return results
     }
 
