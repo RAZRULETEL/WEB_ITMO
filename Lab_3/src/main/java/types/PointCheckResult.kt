@@ -18,21 +18,22 @@ class PointCheckResult (val x: Float, val y: Float, val r: Float, val timestamp:
     }
 
     override fun toString(): String {
-        return "{\"x\": $x, \"y\": $y, \"r\": $r, \"success\": $success, \"timestamp\": $timestamp, \"exec_time\": $executionTime}"
+        return "PointCheckResult(x=$x, y=$y, r=$r, timestamp=$timestamp, executionTime=$executionTime, success=$success)"
     }
+
 
     companion object{
         private fun checkHit(x: Float, y: Float, r: Float): Boolean {
             if(x > 0)
                 if(y > 0)
-                    return (x + y) <= r // Triangle
-                else
-                    return x <= r && y >= -r/2 // Rectangle
-            else
-                if (y > 0)
-                    return false
+                    return (x + y) <= r / 2 // Triangle
                 else
                     return x * x + y * y <= r * r // Arc
+            else
+                if (y > 0)
+                    return x >= -r && y <= r / 2 // Rectangle
+                else
+                    return false
         }
     }
 }

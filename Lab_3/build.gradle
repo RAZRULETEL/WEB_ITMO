@@ -16,7 +16,7 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.6.0'
 }
 war {
-    archiveName = "lab1.war"
+    archiveName = "lab3.war"
     destinationDirectory.set(file("C:\\Users\\RAZRULETEL\\Desktop\\wildfly-preview-29.0.1.Final\\standalone\\deployments"))
 }
 

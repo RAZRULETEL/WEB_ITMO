@@ -17,7 +17,7 @@ window.onload = () => {
                 // const trs = document.getElementById("dots-table").tBodies[0].rows;
                 const trs = document.getElementById("dots-table").getElementsByTagName("table")[0].tBodies[0].rows;
                 if(trs.length > 1)
-                    document.getElementById("tooltip").innerText = document.getElementById("tooltip").innerText.replace("🕓", trs.item(trs.length - 2).classList.contains("success-text") ? "✅" : "❌" )
+                    document.getElementById("tooltip").innerText = document.getElementById("tooltip").innerText.replace("🕓", trs.item(trs.length - 1).classList.contains("success-text") ? "✅" : "❌" )
             }
         }
     });
@@ -143,41 +143,6 @@ window.onload = () => {
     window.requestAnimationFrame(on_animation);
 };
 
-function updateTimeColumn() {
-    const format = +document.getElementById("table-time-format").value;
-    let time_cells = [];
-    for (const tr of document.getElementById("dots-table").tBodies[0].children)
-        for (const td of tr.children)
-            if (td.getAttribute("timestamp"))
-                time_cells.push(td);
-    switch (format) {
-        case 0:
-            time_cells.forEach(e => e.innerText = e.getAttribute("timestamp"));
-            break;
-        case 1:
-            time_cells.forEach(e => e.innerText = new Date(+e.getAttribute("timestamp")));
-            break;
-        case 2:
-            time_cells.forEach(e => {
-                const date = new Date(+e.getAttribute("timestamp"));
-                const day = date.getDate().toString().padStart(2, "0");
-                const month = (date.getMonth() + 1).toString().padStart(2, "0");
-                const year = date.getFullYear().toString();
-                const time = date.toLocaleTimeString();
-
-                e.innerText = `${day}.${month}.${year} ${time}`;
-            });
-            break;
-        case 3:
-            time_cells.forEach(e => {
-                const date = new Date(+e.getAttribute("timestamp"));
-
-                e.innerText = `${date.toLocaleTimeString()}.${date.getMilliseconds()}`;
-            });
-            break;
-    }
-}
-
 function validateText(input, MIN, MAX) {
     if (input.value === "")
         input.setCustomValidity("Значение не введено!");
@@ -185,7 +150,6 @@ function validateText(input, MIN, MAX) {
         input.setCustomValidity("Значение должно быть числом!");
     else {
         const value = +input.value.replace(",", ".");
-        // console.log(value);
         if (value < MIN)
             input.setCustomValidity("Значение слишком маленькое, должно быть не меньше " + MIN);
         else if (value > MAX)
@@ -231,10 +195,4 @@ function replaceColons(){
 
     const input_r = document.getElementById("dot-controls:r");
     input_r.value = input_r.value.replace(",", ".");
-}
-
-function rand(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
 }

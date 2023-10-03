@@ -11,7 +11,6 @@
     <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{mapper.getMapping}</from-action>
             <from-outcome>dots</from-outcome>
             <to-view-id>/dots.xhtml</to-view-id>
         </navigation-case>
@@ -20,11 +19,14 @@
     <navigation-rule>
         <from-view-id>/dots.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{mapper.getMapping}</from-action>
             <from-outcome>index</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 
-
+    <managed-bean>
+        <managed-bean-name>results</managed-bean-name>
+        <managed-bean-class>beans.PointResults</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 </faces-config>

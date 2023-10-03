@@ -62,7 +62,6 @@
                         <h:outputText value="#{point.executionTime}" />
                     </p:column>
                 </p:dataTable>
-<!--                <h:outputText value="#{results.renderTable()}" escape="false"/>-->
             </h:panelGroup>
         </div>
         <div class="table-controls-container">
@@ -85,8 +84,12 @@
                     <f:ajax  execute = "x" render = "x"/>
                 </h:commandLink>
             </div>
-            <p:inputText id="y" requiredMessage="Y is required" required="true" value="#{results.point.y}" placeholder="y"/>
-            <p:inputText id="r" requiredMessage="R is required" required="true" value="#{results.point.r}" placeholder="r"/>
+            <p:inputText id="y" requiredMessage="Y is required" required="true" value="#{results.point.y}" placeholder="y">
+                <f:validateDoubleRange minimum="-3.0" maximum="5.0"/>
+            </p:inputText>
+            <p:inputText id="r" requiredMessage="R is required" required="true" value="#{results.point.r}" placeholder="r">
+                <f:validateDoubleRange minimum="2" maximum="5"/>
+            </p:inputText>
         </div>
         <div>
             <h:commandButton immediate="true" action='#{mapper.remap("index")}' value="Вернуться на стартовую">

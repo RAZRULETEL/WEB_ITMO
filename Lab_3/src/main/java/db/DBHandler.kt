@@ -8,13 +8,10 @@ import java.sql.SQLException
 import java.sql.Statement
 
 class DBHandler private constructor() {
-
     private val connection: Connection = DriverManager.getConnection(
         "$databaseHostPort/$databaseName",
-//        System.getenv("HELIOS_DB_LOGIN"),
-//        System.getenv("HELIOS_DB_PASS"))
-        "LOCAL_DB_LOGIN",
-    "LOCAL_DB_PASS")
+        System.getenv("DB_LOGIN"),
+        System.getenv("DB_PASS"))
 
 
     init {
@@ -83,12 +80,12 @@ class DBHandler private constructor() {
         private const val SQL_DELETE_ALL = "DELETE FROM results;"
 
         //    Helios
-//    private const val databaseHostPort = "jdbc:postgresql://pg:5432" ;
-//    private const val databaseName = "studs";
+    private const val databaseHostPort = "jdbc:postgresql://pg:5432" ;
+    private const val databaseName = "studs";
 
         //    Local
-        private const val databaseHostPort = "jdbc:postgresql://localhost:5433"
-        private const val databaseName = "postgres"
+//        private const val databaseHostPort = "jdbc:postgresql://localhost:5433"
+//        private const val databaseName = "postgres"
 
         var instance: DBHandler = DBHandler()
             get() {

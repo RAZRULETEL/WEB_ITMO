@@ -65,15 +65,15 @@ function drawGraphValues(ctx, axes_offset = 100) {
         second_pos = 1 / 3;
 
     ctx.fillStyle = "#3399ff";
-    ctx.fillRect(cx, cy, (cx - axes_offset) * first_pos, (cy - axes_offset) * second_pos);
+    ctx.fillRect(cx - (cx - axes_offset) * first_pos, cy - (cy - axes_offset) * second_pos, (cx - axes_offset) * first_pos, (cy - axes_offset) * second_pos);
 
     ctx.moveTo(cx, cy);
-    ctx.arc(cx, cx, (cy - axes_offset) * first_pos, Math.PI / 2, Math.PI);
+    ctx.arc(cx, cx, (cy - axes_offset) * first_pos, 0, Math.PI / 2);
     ctx.fill();
 
     ctx.moveTo(cx, cy);
-    ctx.lineTo(cx, axes_offset + (cy - axes_offset) * second_pos);
-    ctx.lineTo(width - axes_offset - (cx - axes_offset) * second_pos, cy);
+    ctx.lineTo(cx, axes_offset + (cy - axes_offset) * first_pos);
+    ctx.lineTo(width - axes_offset - (cx - axes_offset) * first_pos, cy);
     ctx.fill();
 
     ctx.fillStyle = "#000";
