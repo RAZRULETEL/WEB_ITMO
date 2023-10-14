@@ -97,7 +97,7 @@ class DBHandler private constructor() {
 //    private const val databaseName = "studs";
 
         //    Local
-        private const val databaseHostPort = "jdbc:postgresql://localhost:5433"
+        private const val databaseHostPort = "jdbc:postgresql://database:5432"
         private const val databaseName = "postgres"
 
         var instance: DBHandler? = null

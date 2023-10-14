@@ -29,4 +29,10 @@
         <managed-bean-class>beans.PointResults</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>mapper</managed-bean-name>
+        <managed-bean-class>beans.Mapper</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 </faces-config>

@@ -1,0 +1,24 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+
+  wildfly:
+    depends_on:
+      - db
+    image: mastik/lab3-jsf
+    ports:
+      - 8080:8080
+    environment:
+      DB_LOGIN: "postgres"
+      DB_PASS: "postgres"
+    links:
+      - "db:database"
