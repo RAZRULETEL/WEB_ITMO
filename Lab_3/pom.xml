@@ -1,74 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
- <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <groupId>org.jboss</groupId>
-    <artifactId>jboss-parent</artifactId>
-    <version>36</version>
-  </parent>
-
- <name>WildFly Bootable JAR</name>
- <groupId>org.wildfly.plugins</groupId>
- <artifactId>lab3</artifactId>
- <version>10.0.0.Final</version>
- <packaging>war</packaging>
-
-
-
-<properties>
-<version.wildfly>29.0.0.Final</version.wildfly>
-<version.org.wildfly.core.wildfly-core>21.1.0.Final</version.org.wildfly.core.wildfly-core>
-<version.org.wildfly.jar-plugin>10.0.0.Final</version.org.wildfly.jar-plugin>
-<kotlin.version>1.9.10</kotlin.version>
-</properties> 
-
- <dependencies>
-<dependency> <groupId>org.jetbrains.kotlin</groupId> <artifactId>kotlin-stdlib</artifactId> <version>${kotlin.version}</version> </dependency> 
-    <dependency>
-      <groupId>jakarta.platform</groupId>
-      <artifactId>jakarta.jakartaee-web-api</artifactId>
-      <version>10.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.primefaces</groupId>
-      <artifactId>primefaces</artifactId>
-      <version>13.0.0</version>
-<classifier>jakarta</classifier>
-
-    </dependency>
-    <dependency>
-      <groupId>org.omnifaces</groupId>
-      <artifactId>omnifaces</artifactId>
-      <version>4.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>42.6.0</version>
-    </dependency>
-
- </dependencies>
-
- <build>
- <finalName>${project.artifactId}</finalName>
- <plugins>
-<plugin> <groupId>org.jetbrains.kotlin</groupId> <artifactId>kotlin-maven-plugin</artifactId> <version>${kotlin.version}</version> <executions> <execution> <id>compile</id> <goals> <goal>compile</goal> </goals> </execution> <execution> <id>test-compile</id> <goals> <goal>test-compile</goal> </goals> </execution> </executions> </plugin> 
- <plugin>
- <groupId>org.wildfly.plugins</groupId>
- <artifactId>wildfly-jar-maven-plugin</artifactId>
-<version>${version.org.wildfly.jar-plugin}</version>
- <configuration>
- <feature-pack-location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</feature-pack-location>
-<layers>
-
-<layer>jsf</layer>
+    <modelVersion>4.0.0</modelVersion>
+ 
+    <parent>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>36</version>
+    </parent>
+ 
+    <name>WildFly Bootable JAR</name>
+    <groupId>org.wildfly.plugins</groupId>
+    <artifactId>lab3</artifactId>
+    <version>10.0.0.Final</version>
+    <packaging>war</packaging>
+ 
+    <properties>
+        <version.wildfly>29.0.0.Final</version.wildfly>
+        <version.org.wildfly.core.wildfly-core>21.1.0.Final</version.org.wildfly.core.wildfly-core>
+        <version.org.wildfly.jar-plugin>10.0.0.Final</version.org.wildfly.jar-plugin>
+        <kotlin.version>1.9.10</kotlin.version>
+    </properties>
+ 
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-web-api</artifactId>
+            <version>10.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>13.0.0</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.omnifaces</groupId>
+            <artifactId>omnifaces</artifactId>
+            <version>4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
+        </dependency>
+    </dependencies>
+ 
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-jar-maven-plugin</artifactId>
+                <version>${version.org.wildfly.jar-plugin}</version>
+                <configuration>
+                    <feature-pack-location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</feature-pack-location>
+                    <layers>
+                        <layer>jsf</layer>
                         <layer>ejb-lite</layer>
-</layers>
- <excluded-layers>
- <layer>bean-validation</layer>
-<layer>deployment-scanner</layer>
+                    </layers>
+                    <excluded-layers>
+                        <layer>bean-validation</layer>
+                        <layer>deployment-scanner</layer>
                     </excluded-layers>
                     <plugin-options>
                         <jboss-fork-embedded>${plugin.fork.embedded}</jboss-fork-embedded>
@@ -85,4 +104,3 @@
         </plugins>
     </build>
 </project>
-

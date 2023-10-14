@@ -30,3 +30,19 @@
 <p align="center">
   <img src="https://github.com/RAZRULETEL/WEB_ITMO/assets/48093833/0d1a4050-d4fd-4071-9f51-bdc0d7ff2cbe)https://github.com/RAZRULETEL/WEB_ITMO/assets/48093833/0d1a4050-d4fd-4071-9f51-bdc0d7ff2cbe" />
 </p>
+
+### Дополнительное ~~страдание~~ задание
+
+Написать конфигурацию для компиляции лабораторной работы вместе с [WildFly](https://wildfly.org/) сервером в один jar архив. Из полученного jar файла создать Docker image, который с помощью Docker compose развернуть вместе с контейнером PostgreSQL.
+
+**Выполнение:**
+
+`mvn package` - сборка сервера
+
+`docker build -t mastik/lab3-jsf .` - создание Docker image
+
+`docker compose up` - развёртывание контейнеров
+
+</br>
+
+`mvn wildfly-jar:run` - запустить собранный сервер без создания Docker image
