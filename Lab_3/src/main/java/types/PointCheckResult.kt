@@ -16,8 +16,21 @@ class PointCheckResult(
 ) : Serializable {
 
 
-    constructor(x: Float, y: Float, r: Float, timestamp: Long, nanoTimeStart: Long) :
-            this(x, y, r, timestamp, (System.nanoTime() - nanoTimeStart) / 1e6, checkHit(x, y, r))
+    constructor(
+        x: Float,
+        y: Float,
+        r: Float,
+        timestamp: Long,
+        nanoTimeStart: Long,
+    ) :
+            this(
+                x,
+                y,
+                r,
+                timestamp,
+                (System.nanoTime() - nanoTimeStart) / 1e6,
+                checkHit(x, y, r)
+            )
 
     fun getFormattedTimestamp(pattern: String): String {
         return DateTimeFormatter.ofPattern(pattern).format(
@@ -34,7 +47,11 @@ class PointCheckResult(
 
 
     companion object {
-        private fun checkHit(x: Float, y: Float, r: Float): Boolean {
+        private fun checkHit(
+            x: Float,
+            y: Float,
+            r: Float
+        ): Boolean {
             if (x > 0)
                 if (y > 0)
                     return (x + y) <= r / 2 // Triangle
