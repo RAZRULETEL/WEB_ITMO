@@ -7,7 +7,7 @@
 
 [№3](/Lab_3) - JSF + JavaBeans, JDBC
 
-№4 - work in progress
+[№4](/Lab_4) - Spring Boot: Security, Gateway, Eureka, Data JDBC
 
 
 
