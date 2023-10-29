@@ -1,0 +1,66 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+
+  eureka:
+    image: eureka
+    ports:
+      - 8761:8761
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761"]
+      start_period: 40s
+      start_interval: 20s
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  gateway:
+    image: lab4/gateway
+    ports:
+      - 8080:8080
+    depends_on:
+      - eureka
+      - auth
+    links:
+      - "eureka:eureka"
+
+  auth:
+    image: lab4/auth
+    depends_on:
+      - eureka
+      - db
+    environment:
+      DB_LOGIN: "postgres"
+      DB_PASS: "postgres"
+    links:
+      - "eureka:eureka"
+      - "db:database"
+
+  points:
+    image: lab4/points
+    depends_on:
+      - eureka
+      - gateway
+    environment:
+      DB_LOGIN: "postgres"
+      DB_PASS: "postgres"
+    links:
+      - "eureka:eureka"
+      - "db:database"
+
+  frontend:
+    image: lab4/front
+    depends_on:
+      - gateway
+    links:
+      - "gateway:backend"
+    ports:
+      - 3000:3000

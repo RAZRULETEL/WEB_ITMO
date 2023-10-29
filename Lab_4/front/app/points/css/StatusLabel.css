@@ -1,0 +1,11 @@
+.status-label{
+    z-index: 100;
+    color: black;
+    pointer-events: none;
+    position: absolute;
+    transition: 100ms;
+    border-radius: 10px;
+    border: 1px solid;
+    padding: 3px;
+    background: white;
+}

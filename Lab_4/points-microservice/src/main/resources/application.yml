@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: points-service
+  datasource:
+    url: jdbc:postgresql://database:5432/postgres
+    username: ${DB_LOGIN}
+    password: ${DB_PASS}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    showSql: false
+    ddl-auto: create
+server:
+  port: 0
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka
+mastik:
+  corp:
+    jwt-secret: ==========very+super+strong+secret+key+for+that+lab==========
+    services:
+      auth: auth-service

@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: api-gateway
+  main:
+    web-application-type: reactive
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka
+mastik:
+  corp:
+    jwt-secret: ==========very+super+strong+secret+key+for+that+lab==========
+    jwt-expires: 21600000
+    services:
+      auth: auth-service
+      points: points-service

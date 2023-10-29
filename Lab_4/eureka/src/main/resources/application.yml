@@ -1,0 +1,21 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+  server:
+    waitTimeInMsWhenSyncEmpty: 0
+  service-url:
+    defaultZone: http://localhost:8761/eureka
+

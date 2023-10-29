@@ -1,0 +1,82 @@
+.content{
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+
+.content > *:not(:first-child) {
+    margin-top: clamp(5px, 100vh / 800 * 20, 30px);
+}
+
+.form{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    background: var(--foreground);
+    backdrop-filter: blur(var(--background-blur));
+    border-radius: var(--border-radius);
+    margin: auto;
+    width: min(100%, calc(1000px + (100% - 1000px) / 2)); /* To equal flex space-around */
+}
+
+.buttonContainer{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.buttonContainer > button{
+    font-size: 20px;
+}
+
+.radio-checkbox-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    max-width: 150px;
+    gap: 10px;
+    align-items: center;
+}
+
+.radio-checkbox-container > label{
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    padding: 7px;
+    min-width: 50px;
+    text-align: center;
+    border-radius: var(--border-radius);
+    height: fit-content;
+    color: black;
+}
+
+.radio-checkbox-container > label > input{
+    position: absolute;
+    top: -1000em;
+    left: -1000em;
+}
+
+.radio-checkbox-container > label:has(input:checked){
+    background-color: forestgreen;
+}
+
+.radio-checkbox-container > label:hover{
+    background-color: #00d261;
+}
+
+.main-content {
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+@media (max-width: 1000px) {
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+}
