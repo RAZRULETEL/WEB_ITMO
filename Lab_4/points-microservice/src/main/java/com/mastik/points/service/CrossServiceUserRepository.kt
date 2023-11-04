@@ -2,6 +2,7 @@ package com.mastik.points.service
 
 import com.mastik.gateway.communications.AuthRequest
 import com.mastik.gateway.communications.RequestType
+import com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -14,10 +15,9 @@ import kotlin.jvm.Throws
 class CrossServiceUserRepository() {
 
     @Autowired
-    private val communicator: PermanentServiceCommunicator? = null
+    private val communicator: RestServiceCommunicator? = null
 
     fun getUserDetailsService(): UserDetailsService {
-
         return object : UserDetailsService {
             @Throws(UsernameNotFoundException::class)
             override fun loadUserByUsername(username: String): UserDetails {

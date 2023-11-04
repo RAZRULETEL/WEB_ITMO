@@ -1,6 +1,5 @@
-package com.mastik.points
+package com.mastik.auth
 
-import com.mastik.auth.SocketUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory

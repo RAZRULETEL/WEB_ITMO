@@ -15,7 +15,7 @@ class RandomPortInitializer :
     @Value("\${port.number.max:10000}")
     private val maxPort: Int = 0
     override fun customize(factory: ConfigurableServletWebServerFactory) {
-        val port: Int = 8726//SocketUtils.findAvailableTcpPort(minPort, maxPort)
+        val port: Int = SocketUtils.findAvailableTcpPort(minPort, maxPort)
         factory.setPort(port)
         System.getProperties()["server.port"] = port
     }

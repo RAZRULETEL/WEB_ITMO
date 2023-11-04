@@ -1,27 +1,22 @@
 package com.mastik.gateway
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient
+import org.springframework.cloud.client.loadbalancer.LoadBalanced
 import org.springframework.context.annotation.Bean
+import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.client.WebClient
+
 
 @SpringBootApplication
 @EnableDiscoveryClient
-class Main  {
-//    @Autowired
-//    var filter: DynamicGatewayFilter? = null
-
-//    @Bean
-//    fun myRoutes(builder: RouteLocatorBuilder): RouteLocator {
-//        return builder.routes().route { p: PredicateSpec ->
-//            p.path("/**").filters { f: GatewayFilterSpec ->
-//                f.filter(
-//                    filter
-//                )
-//            }.uri("no://op")
-//        }.build()
-//    }
+class Main{
+    @LoadBalanced
+    @Bean
+    fun restTemplate(): RestTemplate? {
+        return RestTemplate()
+    }
 }
 
 fun main(args: Array<String>) {

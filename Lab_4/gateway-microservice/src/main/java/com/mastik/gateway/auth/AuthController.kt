@@ -3,33 +3,34 @@ package com.mastik.gateway.auth
 
 import com.mastik.gateway.auth.jwt.JWTUtils
 import com.mastik.gateway.auth.service.CrossServiceUserRepository
-import io.jsonwebtoken.Jwts.header
-import org.bouncycastle.cms.RecipientId.password
+import com.mastik.gateway.communications.AuthRequest
+import com.mastik.gateway.communications.UserDetailsEntity
+import io.jsonwebtoken.impl.lang.Parameters.uri
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.cloud.gateway.filter.ratelimit.RateLimiter.Response
+import org.springframework.cloud.client.loadbalancer.LoadBalanced
+import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.context.SecurityContext
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.context.SecurityContextHolder.createEmptyContext
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.util.function.Consumer
+import kotlin.text.Typography.registered
 
 
 @RestController
@@ -63,7 +64,7 @@ internal class AuthController {
         println("Received user $response")
         return Mono.just(
             ResponseEntity.ok()
-                .body("{\"success\": ${2 - response.status}, \"error\": \"${response.result as String}\"}")
+                .body("{\"success\": ${2 - response.status} ${if(response.status != AuthRequest.SUCCESS) ", \"error\": \"user already exists\"" else ""}}")
         )
     }
 
