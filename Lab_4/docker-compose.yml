@@ -9,6 +9,8 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: 'postgres'
+    volumes:
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
 
   eureka:
     image: eureka

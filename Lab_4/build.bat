@@ -14,6 +14,6 @@ cd points-microservice
 call ./gradlew bootJar
 docker build -t lab4/points .
 cd ..
-cd lab4
+cd front
 docker build -t lab4/front .
 cd ..
