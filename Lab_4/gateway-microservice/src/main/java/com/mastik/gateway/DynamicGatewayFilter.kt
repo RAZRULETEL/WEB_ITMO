@@ -38,17 +38,6 @@ class DynamicGatewayFilter: GlobalFilter {
                 exchange.attributes[ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR] = uri
             }
 
-
-//        applications.forEach(Consumer { serviceId: String ->
-//            println(serviceId)
-//            val serviceApiSet = ServiceMapper[serviceId]
-//            if(serviceApiSet!!.contains(exchange.request.path.value().split("/").last().split("?").first()))
-//            {
-//                val instance = clients!!.getInstances(serviceId)[0]
-//                exchange.attributes[ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR] = URI("http://${instance.host}:${instance.port}/${exchange.request.path.value().split("/").last()}")
-//            }
-//        })
-
         return chain.filter(exchange)
     }
 }
